@@ -1,14 +1,35 @@
 # encoding: utf-8
 module Anubis
 
+  require  'mysql2'
   require  'anubis/indexer'
   require  'anubis/searchd'
   require  'anubis/index'
   require  'anubis/builder'
   require  'anubis/criteria'
+
+  require  'anubis/railtie' if defined?(Rails)
   
   class << self
     
+    def root
+
+      unless @root
+        @root = Rails.root if defined?(Rails)
+      end
+      @root
+
+    end # root
+
+    def logger(msg)
+
+      unless @logger
+        @logger = Rails.logger if defined?(Rails)
+      end
+      @logger.error(msg)
+
+    end # logger
+
     def mkdir(val)
       ::FileUtils.mkdir_p(val, :mode => 0755) unless ::FileTest.directory?(val)
     end # mkdir
@@ -95,7 +116,7 @@ module Anubis
     end # stopwait
 
     def sphinx_conf
-      @sphinx_conf ||= File.join(Rails.root, "config", "sphinx.conf")
+      @sphinx_conf ||= File.join(Anubis.root, "config", "sphinx.conf")
     end # sphinx_conf  
 
     def create(name)
@@ -146,7 +167,7 @@ module Anubis
     def manage_index(name)
 
       unless (path = Anubis::Builder.db_paths[name])
-        puts Rails.logger.error("ANUBIS [ERROR] Sphinx index `#{name}` is not found.")
+        puts Anubis.logger("ANUBIS [ERROR] Sphinx index `#{name}` is not found.")
       else        
         yield(path)
       end # unless
@@ -160,7 +181,7 @@ module Anubis
     def config_exists?
 
       unless ::File.exist?(sphinx_conf)
-        puts Rails.logger.warn("ANUBIS [ERROR] Configuration file #{sphinx_conf} does not exist. Please, generate it before.")
+        puts Anubis.logger("ANUBIS [ERROR] Configuration file #{sphinx_conf} does not exist. Please, generate it before.")
         return false  
       else
         return true  
@@ -178,11 +199,11 @@ module Anubis
     def sphinx_connect
       
       retry_stop = false  
-      Mysql2::Client.default_query_options[:connect_flags] |= Mysql2::Client::PROTOCOL_41
+      ::Mysql2::Client.default_query_options[:connect_flags] |= ::Mysql2::Client::PROTOCOL_41
 
       begin
-        @conn = Mysql2::Client.new(Anubis::Builder.address)
-      rescue Mysql2::Error => e
+        @conn = ::Mysql2::Client.new(Anubis::Builder.address)
+      rescue ::Mysql2::Error => e
 
         e.error.gsub!(/MySQL/, 'Sphinx')
 

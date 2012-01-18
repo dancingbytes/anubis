@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
 
   s.licenses = ['MIT']
 
-  s.add_development_dependency 'bundler', ['>= 1.0.0']
-  s.add_development_dependency 'mysql2',  ['>= 0.3.11']
+  s.add_dependency 'bundler', ['>= 1.0.0']
+  s.add_dependency 'mysql2',  ['>= 0.3.11']
 
 end

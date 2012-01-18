@@ -6,7 +6,7 @@ module Anubis
   require  'anubis/searchd'
   require  'anubis/index'
   require  'anubis/builder'
-  require  'anubis/criteria'
+  require  'anubis/criteria' if defined?(Mongoid)
 
   require  'anubis/railtie' if defined?(Rails)
   

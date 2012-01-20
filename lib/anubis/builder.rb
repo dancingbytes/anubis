@@ -55,7 +55,8 @@ module Anubis
 
       {
         :host => @host,
-        :port => @port
+        :port => @port,
+        :encoding => "utf8"
       }
 
     end # address

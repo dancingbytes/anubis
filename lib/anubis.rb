@@ -210,8 +210,7 @@ module Anubis
     def sphinx_connect
       
       retry_stop = false  
-      ::Mysql2::Client.default_query_options[:connect_flags] |= ::Mysql2::Client::PROTOCOL_41
-
+      
       begin
         @conn = ::Mysql2::Client.new(Anubis::Builder.address)
       rescue => e

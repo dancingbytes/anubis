@@ -8,7 +8,8 @@ module Anubis
   require  'anubis/functions/snippets'
 
   require  'anubis/mongoid/criteria'  if defined?(Mongoid)
-  require  'anubis/railtie'   if defined?(Rails)
+  require  'anubis/result'
+  require  'anubis/railtie'           if defined?(Rails)
   
   class << self
     

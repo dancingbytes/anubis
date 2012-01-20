@@ -56,6 +56,7 @@ module Anubis
 
     alias :current_page_count   :count
     alias :total_found          :count
+    alias :total_entries        :count
     alias :total_found=         :count=
 
     alias :page                 :current_page         

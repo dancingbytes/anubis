@@ -20,35 +20,32 @@ module Anubis
       @sql      = nil
 
       @data = data.is_a?(::Array) ? data : [data]
-      @data = @data.map! { |v| "'#{v}'" }.join(",")
+      @data = @data.map! { |v| "'#{conn.escape(v)}'" }.join(",")
 
     end # new
 
     def before_match(val = "<b>")
       
       manage_option("before_match", val) do |v|
-        "'#{v}'"
+        "'#{@conn.escape(v)}'"
       end
-      #self
-
+      
     end # before_match
 
     def after_match(val = "</b>")
       
       manage_option("after_match", val) do |v|
-        "'#{v}'"
+        "'#{@conn.escape(v)}'"
       end
-      #self
-
+      
     end # after_match      
 
     def chunk_separator(val = "...")
       
       manage_option("chunk_separator", val) { |v|
-        "'#{v}'"
+        "'#{@conn.escape(v)}'"
       }
-      self
-
+      
     end # chunk_separator
     
     def limit(val = 256)
@@ -56,7 +53,6 @@ module Anubis
       manage_option("limit", val) { |v|
         v.to_s.to_i(10).abs
       }
-      self
 
     end # limit
 
@@ -65,7 +61,6 @@ module Anubis
       manage_option("around", val) { |v|
         v.to_s.to_i(10).abs
       }
-      self
 
     end # around  
 
@@ -74,7 +69,6 @@ module Anubis
       manage_option("exact_phrase", val) { |v|
         (v == true ? 1 : 0)
       }
-      self
 
     end # exact_phrase  
 
@@ -83,7 +77,6 @@ module Anubis
       manage_option("single_passage", val) { |v|
         (v == true ? 1 : 0)
       }
-      self
 
     end # single_passage  
 
@@ -92,7 +85,6 @@ module Anubis
       manage_option("use_boundaries", val) { |v|
         (v == true ? 1 : 0)
       }
-      self
 
     end # use_boundaries  
 
@@ -101,7 +93,6 @@ module Anubis
       manage_option("weight_order", val) { |v|
         (v == true ? 1 : 0)
       }
-      self
 
     end # weight_order  
 
@@ -110,7 +101,6 @@ module Anubis
       manage_option("query_mode", val) { |v|
         (v == true ? 1 : 0)
       }
-      self
 
     end # query_mode  
 
@@ -119,7 +109,6 @@ module Anubis
       manage_option("force_all_words", val) { |v|
         (v == true ? 1 : 0)
       }
-      self
 
     end # force_all_words  
 
@@ -128,7 +117,6 @@ module Anubis
       manage_option("limit_passages", val) { |v|
         v.to_s.to_i(10).abs
       }
-      self
 
     end # limit_passages  
 
@@ -137,7 +125,6 @@ module Anubis
       manage_option("limit_words", val) { |v|
         v.to_s.to_i(10).abs
       }
-      self
 
     end # limit_words  
 
@@ -146,7 +133,6 @@ module Anubis
       manage_option("start_passage_id", val) { |v|
         v.to_s.to_i(10).abs
       }
-      self
 
     end # start_passage_id  
 
@@ -155,7 +141,6 @@ module Anubis
       manage_option("load_files", val) { |v|
         (v == true ? 1 : 0)
       }
-      self
 
     end # load_files  
 
@@ -164,7 +149,6 @@ module Anubis
       manage_option("load_files_scattered", val) { |v|
         (v == true ? 1 : 0)
       }
-      self
 
     end # load_files_scattered  
 
@@ -172,8 +156,8 @@ module Anubis
       
       manage_option("html_strip_mode", val) { |v|
         v = v.to_s.downcase
-        v = ::HTML_STRIP_MODE_VALUES.first unless ::HTML_STRIP_MODE_VALUES.include?(v)
-        v
+        v = HTML_STRIP_MODE_VALUES.first unless HTML_STRIP_MODE_VALUES.include?(v)
+        "'#{@conn.escape(v)}'"
       }
       self
 
@@ -192,8 +176,8 @@ module Anubis
 
       manage_option("passage_boundary", val) { |v|
         v = v.to_s.downcase
-        v = ::PASSAGE_BOUNDARY_VALUES.first unless ::PASSAGE_BOUNDARY_VALUES.include?(v)
-        v
+        v = PASSAGE_BOUNDARY_VALUES.first unless PASSAGE_BOUNDARY_VALUES.include?(v)
+        "'#{@conn.escape(v)}'"
       }
       self
 

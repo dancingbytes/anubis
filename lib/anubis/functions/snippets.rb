@@ -1,6 +1,6 @@
 module Anubis
 
-  class Snippets
+  class Snippets < BasicObject
 
     HTML_STRIP_MODE_VALUES = [
       "index", "none", "strip", "retain"
@@ -16,27 +16,28 @@ module Anubis
       @options  = {}
       @index    = index
       @query    = query
+      @sql      = nil
 
-      @data = data.is_a?(Array) ? data : [data]
+      @data = data.is_a?(::Array) ? data : [data]
       @data = @data.map! { |v| "'#{v}'" }.join(",")
 
     end # new
 
     def before_match(val = "<b>")
       
-      manage_option("before_match", val) { |v|
+      manage_option("before_match", val) do |v|
         "'#{v}'"
-      }
-      self
+      end
+      #self
 
     end # before_match
 
     def after_match(val = "</b>")
       
-      manage_option("after_match", val) { |v|
+      manage_option("after_match", val) do |v|
         "'#{v}'"
-      }
-      self
+      end
+      #self
 
     end # after_match      
 
@@ -208,25 +209,43 @@ module Anubis
 
     def to_sql
 
-      options = ", " << @options.values.join(', ') unless @options.empty?
-      "CALL SNIPPETS((#{@data}), '#{@index}', '#{@query}'#{options})"
+      unless @sql
+        options = ", " << @options.values.join(', ') unless @options.empty?
+        @sql = "CALL SNIPPETS((#{@data}), '#{@index}', '#{@query}'#{options})"
+      end
+      @sql
 
     end # to_sql  
 
-    def to_s
-      @conn.sql(self.to_sql)
-    end # to_s
+    def method_missing(name, *args, &block)
+
+      s = @conn.sql(self.to_sql)
+      s.send(name, *args, &block)
+
+    end # method_missing
+
+    def inspect
+
+      "#<Anubis::Snippets\n" <<
+      " data:     #{@data},\n" <<
+      " index:    #{@index},\n" <<
+      " query:    #{@query},\n" <<
+      " options:  #{@options.inspect}>\n"
+
+    end # inspect
 
     private
 
     def manage_option(key, value)
 
+      @sql = nil
       if value.nil?
         @options.delete(key)
       else
-        value = yield(value) if block_given?
-        @options[key] = "#{value} AS #{limit}"  
+        value = yield(value)
+        @options[key] = "#{value} AS #{key}"  
       end
+      self
 
     end # manage_option
 

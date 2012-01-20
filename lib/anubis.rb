@@ -2,6 +2,8 @@
 module Anubis
 
   require  'mysql2'
+  require  'anubis/error'
+
   require  'anubis/builder'
   require  'anubis/functions/snippets'
 
@@ -54,11 +56,8 @@ module Anubis
 
       begin
         conn.query(q, :cast => false)
-      rescue => e #::Mysql2::Error => e
-        e.error.gsub!(/MySQL/, 'Sphinx')
-        raise e
-      #rescue => e
-      #  raise StandardError, e  
+      rescue => e
+        raise SphinxError.new(e)
       end
 
     end # sql
@@ -214,10 +213,9 @@ module Anubis
 
       begin
         @conn = ::Mysql2::Client.new(Anubis::Builder.address)
-      rescue ::Mysql2::Error => e
-
-        e.error.gsub!(/MySQL/, 'Sphinx')
-
+      rescue => e
+        
+        e = SphinxError.new(e)
         if !retry_stop && !(e.error =~ Regexp.new("Can't connect to Sphinx server on")).nil?
           retry_stop = true
           start
@@ -227,10 +225,8 @@ module Anubis
 
         raise e
 
-      rescue => e
-        raise StandardError, e
       end  
-        
+
     end # sphinx_connect
 
   end # class << self

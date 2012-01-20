@@ -22,8 +22,8 @@ module Anubis
       @count || 0
     end # count
 
-    def count=(val)
-      @count = val.to_s.to_i(10).abs
+    def count=(v)
+      @count = v.to_s.to_i(10).abs
     end # count
 
     def current_page
@@ -31,7 +31,11 @@ module Anubis
     end # current_page
 
     def current_page=(v)
+      
       @page = v.to_s.to_i(10).abs
+      @page = 1 if @page < 1
+      @page
+
     end # current_page  
     
     def num_pages

@@ -2,13 +2,11 @@
 module Anubis
 
   require  'mysql2'
-  require  'anubis/indexer'
-  require  'anubis/searchd'
-  require  'anubis/index'
   require  'anubis/builder'
-  require  'anubis/criteria' if defined?(Mongoid)
+  require  'anubis/functions/snippets'
 
-  require  'anubis/railtie' if defined?(Rails)
+  require  'anubis/mongoid/criteria'  if defined?(Mongoid)
+  require  'anubis/railtie'   if defined?(Rails)
   
   class << self
     
@@ -44,12 +42,25 @@ module Anubis
 
     end # meta
 
+    def snippets(data, index, query)
+      ::Anubis::Snippets.new(self, data, index, query)
+    end # snippets
+
     def escape(str)
       conn.escape(str || "")
     end # escape 
 
     def sql(q)
-      conn.query(q, :cast => false)
+
+      begin
+        conn.query(q, :cast => false)
+      rescue => e #::Mysql2::Error => e
+        e.error.gsub!(/MySQL/, 'Sphinx')
+        raise e
+      #rescue => e
+      #  raise StandardError, e  
+      end
+
     end # sql
 
     def configure

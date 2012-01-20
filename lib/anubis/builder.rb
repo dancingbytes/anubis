@@ -1,4 +1,8 @@
 # encoding: utf-8
+require  'anubis/builder/indexer'
+require  'anubis/builder/searchd'
+require  'anubis/builder/index'
+
 module Anubis
 
   class Builder

@@ -18,7 +18,7 @@ module Anubis
   		
   		Encoding.default_internal = nil
   		Encoding.default_external = "UTF-8"
-  		@conn ||= new(hash) 
+  		new(hash) 
 
   	end # self.connection
 

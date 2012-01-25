@@ -1,7 +1,7 @@
 # encoding: utf-8
 module Anubis
 
-  class Snippets < BasicObject
+  class Snippets
 
     HTML_STRIP_MODE_VALUES = [
       "index", "none", "strip", "retain"

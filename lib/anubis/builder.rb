@@ -72,7 +72,7 @@ module Anubis
 
     def indexer(&block)
 
-      r = Anubis::Indexer.new
+      r = ::Anubis::Indexer.new
       r.instance_eval &block if block_given?
       @indexer = r.compile
       
@@ -80,7 +80,7 @@ module Anubis
 
     def searchd(&block)
 
-      r = Anubis::Searchd.new
+      r = ::Anubis::Searchd.new
       r.instance_eval &block if block_given?
       
       @host = r.host
@@ -93,7 +93,7 @@ module Anubis
      
       return if name.nil? || name.empty?
         
-      r = Anubis::Index.new(name)
+      r = ::Anubis::Index.new(name)
       r.instance_eval &block if block_given?
       @index[name] = r.compile
       @db_paths[name] = @index[name]["path"] || nil

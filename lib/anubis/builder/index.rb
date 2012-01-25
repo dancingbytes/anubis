@@ -8,7 +8,7 @@ module Anubis
       @params = { "type" => "rt" }
 
       # default params
-      path  ::File.join(Rails.root, "db", "anubis", "data", name)
+      path  ::File.join(::Rails.root, "db", "anubis", "data", name)
       dict
       charset_type
       morphology
@@ -44,7 +44,7 @@ module Anubis
       arr = ::File.split(val)
       arr.pop
       if (path = ::File.join(arr))
-        Anubis.mkdir(path)
+        ::Anubis.mkdir(path)
         @params["path"] = val
       end
       

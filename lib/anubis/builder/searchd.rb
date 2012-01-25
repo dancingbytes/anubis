@@ -8,10 +8,10 @@ module Anubis
       @params = {}
 
       # default params
-      log         File.join(Rails.root, "log", "sphinx.log")
-      query_log   File.join(Rails.root, "log", "sphinx.query.log")
-      pid_file    File.join(Rails.root, "tmp", "pids", "sphinx.pid")
-      binlog_path File.join(Rails.root, "db",  "anubis")
+      log         ::File.join(::Rails.root, "log", "sphinx.log")
+      query_log   ::File.join(::Rails.root, "log", "sphinx.query.log")
+      pid_file    ::File.join(::Rails.root, "tmp", "pids", "sphinx.pid")
+      binlog_path ::File.join(::Rails.root, "db",  "anubis")
 
       compat_sphinxql_magics
       query_log_format
@@ -59,7 +59,7 @@ module Anubis
     def log(val = nil)
 
       return unless val
-      Anubis.mkdir(::File.dirname(val))
+      ::Anubis.mkdir(::File.dirname(val))
       @params["log"] = val
 
     end # log  
@@ -67,7 +67,7 @@ module Anubis
     def query_log(val = nil)
 
       return unless val
-      Anubis.mkdir(::File.dirname(val))
+      ::Anubis.mkdir(::File.dirname(val))
       @params["query_log"] = val
 
     end # query_log
@@ -95,7 +95,7 @@ module Anubis
     def pid_file(val)
 
       return unless val
-      Anubis.mkdir(::File.dirname(val))
+      ::Anubis.mkdir(::File.dirname(val))
       @params["pid_file"] = val
 
     end # pid_file
@@ -174,7 +174,7 @@ module Anubis
 
     def binlog_path(val)
       
-      Anubis.mkdir(val) if val
+      ::Anubis.mkdir(val) if val
       @params["binlog_path"] = val || ""
 
     end # binlog_path

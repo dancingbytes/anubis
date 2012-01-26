@@ -1,7 +1,7 @@
 # encoding: utf-8
 module Anubis
 
-  class Snippets
+  class Snippets < ::BasicObject
 
     HTML_STRIP_MODE_VALUES = [
       "index", "none", "strip", "retain"

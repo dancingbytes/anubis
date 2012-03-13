@@ -6,7 +6,7 @@ namespace :anubis do
 
     puts
     puts "Generating sphinx config #{Anubis.sphinx_conf}... "
-    puts Anubis.configure ? "Success" : "Failure"
+    puts (Anubis.configure ? "Success" : "Failure")
     puts
 
   end # :config

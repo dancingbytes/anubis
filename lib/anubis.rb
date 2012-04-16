@@ -50,7 +50,7 @@ module Anubis
     end # snippets
 
     def escape(str)
-      conn.escape(str || "")
+      conn.escape( (str || "").gsub(/[\n\r]/, " ").gsub('/', '\/') )
     end # escape 
 
     def sql(q)

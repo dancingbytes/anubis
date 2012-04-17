@@ -32,6 +32,7 @@ module Anubis
     def total_found
       @total
     end # total_found
+    alias :total_count :total_found
     
   end # Criteria
 

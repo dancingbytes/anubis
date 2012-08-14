@@ -51,8 +51,15 @@ module Anubis
 
   def escape(str, escape_fields = true)
 
-    str = (str || "").gsub(/[\n\r]/, " ").gsub('/', '\/').gsub('-', '\\-')
+    str = (str || "")
+      .gsub(/[\n\r]/, " ")
+      .gsub('/', '\/')
+      .gsub('-', '\\-')
+      .gsub('(', '\\(')
+      .gsub(')', '\\)')
+
     str = str.gsub('@', '\\@') if escape_fields
+
     conn.escape(str)
 
   end # escape

@@ -57,7 +57,7 @@ module Anubis
         :host       => @host,
         :port       => @port,
         :encoding   => "utf8",
-        :reconnect  => true,
+#        :reconnect  => true,
         :poolsize   => 10
       }
 

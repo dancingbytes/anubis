@@ -6,8 +6,8 @@ namespace :anubis do
 
     puts
     puts "Generating sphinx config #{Anubis.sphinx_conf}... "
-    puts (Anubis.configure ? "Success" : "Failure")
-    puts
+    raise ::Anubis::SphinxError.new("Error generate sphinx config") unless Anubis.configure
+    puts "Ok"
 
   end # :config
 
@@ -16,8 +16,8 @@ namespace :anubis do
 
     puts
     puts "Starting sphinx..."
-    puts Anubis.start
-    
+    Anubis.start
+
   end # :start
 
   desc 'Stopping Sphinx'
@@ -25,52 +25,54 @@ namespace :anubis do
 
     puts
     puts "Stopping sphinx..."
-    puts Anubis.stop
-    
+    Anubis.stop
+
   end # :stop
 
   desc 'Restaring Sphinx'
   task :restart => :environment do
-    
-    puts
-    puts "Restaring sphinx..."
-    puts Anubis.stop
-    sleep 3
-    puts Anubis.start
+
+    Rake::Task["anubis:stop"].invoke
+    sleep 2
+    Rake::Task["anubis:start"].invoke
 
   end # :restart
 
   desc 'Drop all Sphinx indexes'
   task :drop => :environment do
-    
-    puts
-    puts Anubis.stop
-    sleep 3
+
+    Rake::Task["anubis:stop"].invoke
+
+    sleep 2
+
+    puts "Droping all Sphinx indexes..."
     Anubis.drop_all
-    
-  end # :restart  
+
+  end # :restart
 
   desc 'Create all Sphinx indexes'
   task :create => :environment do
-    
-    puts
-    puts Anubis.stop
-    sleep 3
+
+    Rake::Task["anubis:stop"].invoke
+
+    sleep 2
+
+    puts "Creating all Sphinx indexes..."
     Anubis.create_all
-    
-  end # :restart  
+
+  end # :restart
 
   desc 'Rebuild all Sphinx indexes'
   task :rebuild => :environment do
-    
-    puts
-    puts Anubis.stop
-    sleep 3
-    Anubis.drop_all
-    Rake::Task["anubis:config"].invoke
-    Anubis.create_all
-    puts Anubis.start
 
-  end # :restart  
+    Rake::Task["anubis:drop"].invoke
+    Rake::Task["anubis:config"].invoke
+
+    puts "Creating all Sphinx indexes..."
+    Anubis.create_all
+
+    Rake::Task["anubis:start"].invoke
+
+  end # :restart
 
 end # :anubis

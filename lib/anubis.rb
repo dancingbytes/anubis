@@ -1,15 +1,15 @@
 # encoding: utf-8
+require  'anubis/protocol'
+require  'anubis/version'
+
+require  'anubis/builder'
+require  'anubis/functions/snippets'
+
+require  'anubis/mongoid/criteria'  if defined?(::Mongoid)
+require  'anubis/result'
+require  'anubis/railtie'           if defined?(::Rails)
+
 module Anubis
-
-  require  'anubis/protocol'
-  require  'anubis/version'
-
-  require  'anubis/builder'
-  require  'anubis/functions/snippets'
-
-  require  'anubis/mongoid/criteria'  if defined?(::Mongoid)
-  require  'anubis/result'
-  require  'anubis/railtie'           if defined?(::Rails)
 
   extend self
 
@@ -66,11 +66,11 @@ module Anubis
 
   def sql(q)
 
-    begin
+    #begin
       conn.query(q)
-    rescue => e
-      raise ::Anubis::SphinxError.new(e)
-    end
+    #rescue => e
+    #  raise ::Anubis::SphinxError.new(e)
+    #end
 
   end # sql
 
@@ -119,24 +119,21 @@ module Anubis
   def start
 
     return unless config_exists?
-    msg `searchd -c #{sphinx_conf}`, $?
-    self
+    msg `searchd -c #{sphinx_conf}`, $?, "Ok"
 
   end # start
 
   def stop
 
     return unless config_exists?
-    msg `searchd -c #{sphinx_conf} --stop`, $?
-    self
+    msg `searchd -c #{sphinx_conf} --stop`, $?, "Ok"
 
   end # stop
 
   def stopwait
 
     return unless config_exists?
-    msg `searchd -c #{sphinx_conf} --stopwait`, $?
-    self
+    msg `searchd -c #{sphinx_conf} --stopwait`, $?, "Ok"
 
   end # stopwait
 
@@ -220,8 +217,8 @@ module Anubis
 
   def conn
 
-    sphinx_connect if (@conn.nil? || !@conn.ping)
-    @conn
+    sphinx_connect if (::Thread.current[:conn].nil? || !::Thread.current[:conn].ping)
+    ::Thread.current[:conn]
 
   end # conn
 
@@ -230,7 +227,7 @@ module Anubis
     retry_stop = false
 
     begin
-      @conn = ::Anubis::Protocol.connection(::Anubis::Builder.conn)
+      ::Thread.current[:conn] = ::Anubis::Protocol.connection(::Anubis::Builder.conn)
     rescue => e
 
       e = ::Anubis::SphinxError.new(e)

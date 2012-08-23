@@ -21,7 +21,6 @@ Gem::Specification.new do |s|
   s.licenses    = ['BSD']
 
   s.add_dependency 'bundler', ['>= 1.0.0']
-  s.add_dependency 'em-synchrony', ['>= 1.0.2']
   s.add_dependency 'mysql2',  ['>= 0.3.11']
 
 end

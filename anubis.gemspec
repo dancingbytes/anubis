@@ -3,10 +3,10 @@ $:.push File.expand_path("../lib", __FILE__)
 require "anubis/version"
 
 Gem::Specification.new do |s|
-  
+
   s.name        = 'anubis'
-  s.version     = Anubis::VERSION
-  s.platform    = Gem::Platform::RUBY
+  s.version     = ::Anubis::VERSION
+  s.platform    = ::Gem::Platform::RUBY
   s.authors     = ['redfield', 'Tyralion']
   s.email       = ['info@dancingbytes.ru']
   s.homepage    = 'https://github.com/dancingbytes/anubis'
@@ -15,10 +15,10 @@ Gem::Specification.new do |s|
 
   s.files       = `git ls-files`.split("\n")
   s.test_files  = `git ls-files -- {test,spec,features}/*`.split("\n")
-  s.extra_rdoc_files = ['README']
+  s.extra_rdoc_files = ['README.md']
   s.require_paths = ['lib']
 
-  s.licenses = ['MIT']
+  s.licenses    = ['BSD']
 
   s.add_dependency 'bundler', ['>= 1.0.0']
   s.add_dependency 'mysql2',  ['>= 0.3.11']

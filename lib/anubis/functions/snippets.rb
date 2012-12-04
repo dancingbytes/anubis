@@ -12,7 +12,7 @@ module Anubis
     ]
 
     def initialize(conn, data, index, query)
-      
+
       @conn     = conn
       @options  = {}
       @index    = index
@@ -20,36 +20,36 @@ module Anubis
       @sql      = nil
 
       @data = data.is_a?(::Array) ? data : [data]
-      @data = @data.map! { |v| "'#{conn.escape(v)}'" }.join(",")
+      @data = @data.map! { |v| "'#{conn.simple_escape(v)}'" }.join(",")
 
     end # new
 
     def before_match(val = "<b>")
-      
+
       manage_option("before_match", val) do |v|
-        "'#{@conn.escape(v)}'"
+        "'#{@conn.simple_escape(v)}'"
       end
-      
+
     end # before_match
 
     def after_match(val = "</b>")
-      
+
       manage_option("after_match", val) do |v|
-        "'#{@conn.escape(v)}'"
+        "'#{@conn.simple_escape(v)}'"
       end
-      
-    end # after_match      
+
+    end # after_match
 
     def chunk_separator(val = "...")
-      
+
       manage_option("chunk_separator", val) { |v|
-        "'#{@conn.escape(v)}'"
+        "'#{@conn.simple_escape(v)}'"
       }
-      
+
     end # chunk_separator
-    
+
     def limit(val = 256)
-      
+
       manage_option("limit", val) { |v|
         v.to_s.to_i(10).abs
       }
@@ -57,12 +57,12 @@ module Anubis
     end # limit
 
     def around(val = 5)
-      
+
       manage_option("around", val) { |v|
         v.to_s.to_i(10).abs
       }
 
-    end # around  
+    end # around
 
     def exact_phrase(val = false)
 
@@ -70,7 +70,7 @@ module Anubis
         (v == true ? 1 : 0)
       }
 
-    end # exact_phrase  
+    end # exact_phrase
 
     def single_passage(val = false)
 
@@ -78,7 +78,7 @@ module Anubis
         (v == true ? 1 : 0)
       }
 
-    end # single_passage  
+    end # single_passage
 
     def use_boundaries(val = false)
 
@@ -86,7 +86,7 @@ module Anubis
         (v == true ? 1 : 0)
       }
 
-    end # use_boundaries  
+    end # use_boundaries
 
     def weight_order(val = false)
 
@@ -94,7 +94,7 @@ module Anubis
         (v == true ? 1 : 0)
       }
 
-    end # weight_order  
+    end # weight_order
 
     def query_mode(val = false)
 
@@ -102,7 +102,7 @@ module Anubis
         (v == true ? 1 : 0)
       }
 
-    end # query_mode  
+    end # query_mode
 
     def force_all_words(val = false)
 
@@ -110,7 +110,7 @@ module Anubis
         (v == true ? 1 : 0)
       }
 
-    end # force_all_words  
+    end # force_all_words
 
     def limit_passages(val = 0)
 
@@ -118,7 +118,7 @@ module Anubis
         v.to_s.to_i(10).abs
       }
 
-    end # limit_passages  
+    end # limit_passages
 
     def limit_words(val = 0)
 
@@ -126,23 +126,23 @@ module Anubis
         v.to_s.to_i(10).abs
       }
 
-    end # limit_words  
+    end # limit_words
 
     def start_passage_id(val = 1)
-      
+
       manage_option("start_passage_id", val) { |v|
         v.to_s.to_i(10).abs
       }
 
-    end # start_passage_id  
+    end # start_passage_id
 
     def load_files(val = false)
-      
+
       manage_option("load_files", val) { |v|
         (v == true ? 1 : 0)
       }
 
-    end # load_files  
+    end # load_files
 
     def load_files_scattered(val = false)
 
@@ -150,18 +150,18 @@ module Anubis
         (v == true ? 1 : 0)
       }
 
-    end # load_files_scattered  
+    end # load_files_scattered
 
     def html_strip_mode(val = "index")
-      
+
       manage_option("html_strip_mode", val) { |v|
         v = v.to_s.downcase
         v = HTML_STRIP_MODE_VALUES.first unless HTML_STRIP_MODE_VALUES.include?(v)
-        "'#{@conn.escape(v)}'"
+        "'#{@conn.simple_escape(v)}'"
       }
       self
 
-    end # html_strip_mode  
+    end # html_strip_mode
 
     def allow_empty(val = false)
 
@@ -170,27 +170,27 @@ module Anubis
       }
       self
 
-    end # allow_empty  
+    end # allow_empty
 
     def passage_boundary(val = nil)
 
       manage_option("passage_boundary", val) { |v|
         v = v.to_s.downcase
         v = PASSAGE_BOUNDARY_VALUES.first unless PASSAGE_BOUNDARY_VALUES.include?(v)
-        "'#{@conn.escape(v)}'"
+        "'#{@conn.simple_escape(v)}'"
       }
       self
 
-    end # passage_boundary  
+    end # passage_boundary
 
     def emit_zones(val = false)
-      
+
       manage_option("emit_zones", val) { |v|
         (v == true ? 1 : 0)
       }
       self
 
-    end # emit_zones  
+    end # emit_zones
 
     def to_sql
 
@@ -200,7 +200,7 @@ module Anubis
       end
       @sql
 
-    end # to_sql  
+    end # to_sql
 
     def method_missing(name, *args, &block)
 
@@ -228,7 +228,7 @@ module Anubis
         @options.delete(key)
       else
         value = yield(value)
-        @options[key] = "#{value} AS #{key}"  
+        @options[key] = "#{value} AS #{key}"
       end
       self
 

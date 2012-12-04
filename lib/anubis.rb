@@ -64,6 +64,10 @@ module Anubis
 
   end # escape
 
+  def simple_escape(str)
+    conn.escape(str)
+  end # simple_escape
+
   def sql(q)
 
     #begin

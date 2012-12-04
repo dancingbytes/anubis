@@ -9,8 +9,8 @@ module Anubis
       @page       = options[:page].try(:to_i) || 1
       @per_page   = options[:per_page].try(:to_i) || 20
       @total      = options[:total].try(:to_i) || @original_criteria.count
-      @options    = @original_criteria.options 
-      @klass      = @original_criteria.klass 
+      @options    = @original_criteria.options
+      @klass      = @original_criteria.klass
       @documents  = @original_criteria.documents
       @embedded   = @original_criteria.embedded
       @selector   = @original_criteria.selector
@@ -24,6 +24,7 @@ module Anubis
     def num_pages
       (@total.to_f / @per_page).ceil
     end # num_pages
+    alias_method :total_pages, :num_pages
 
     def limit_value
       @per_page

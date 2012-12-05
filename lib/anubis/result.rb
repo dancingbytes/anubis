@@ -56,13 +56,13 @@ module Anubis
 
     alias :current_page_count   :count
     alias :total_found          :count
-    alias :total_pages          :count
     alias :total_entries        :count
     alias :total_found=         :count=
 
     alias :page                 :current_page
 
     alias :pages                :num_pages
+    alias :total_pages          :num_pages
 
     alias :per_page             :limit_value
     alias :per_page=            :limit_value=

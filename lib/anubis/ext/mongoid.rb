@@ -37,4 +37,4 @@ module Anubis
 
   end # Criteria
 
-end # Anubis  
+end # Anubis

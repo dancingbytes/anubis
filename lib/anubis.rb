@@ -5,9 +5,10 @@ require  'anubis/version'
 require  'anubis/builder'
 require  'anubis/functions/snippets'
 
-require  'anubis/mongoid/criteria'  if defined?(::Mongoid)
+require  'anubis/ext/mongoid'   if defined?(::Mongoid)
+
 require  'anubis/result'
-require  'anubis/railtie'           if defined?(::Rails)
+require  'anubis/railtie'       if defined?(::Rails)
 
 module Anubis
 

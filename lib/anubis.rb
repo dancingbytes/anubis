@@ -71,11 +71,12 @@ module Anubis
 
   def sql(q)
 
-    #begin
+    begin
       conn.query(q)
-    #rescue => e
-    #  raise ::Anubis::SphinxError.new(e)
-    #end
+    rescue => e
+      puts "[request] #{q}"
+      raise ::Anubis::SphinxError.new(e)
+    end
 
   end # sql
 

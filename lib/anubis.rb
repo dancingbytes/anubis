@@ -85,7 +85,6 @@ module Anubis
 
         retry_stop = true
         sphinx_connect
-        sleep 3
         retry
 
       end

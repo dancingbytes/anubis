@@ -237,9 +237,9 @@ module Anubis
     rescue => e
 
       e = ::Anubis::SphinxError.new(e)
-      if !retry_stop && \\
+      if !retry_stop &&
         (
-          !(e.error =~ ::Regexp.new("Can't connect to Sphinx server on")).nil? || \\
+          !(e.error =~ ::Regexp.new("Can't connect to Sphinx server on")).nil? ||
           !(e.error =~ ::Regexp.new("Lost connection to MySQL server during query")).nil?
         )
         retry_stop = true

@@ -57,7 +57,8 @@ module Anubis
         :host       => @host,
         :port       => @port,
         :encoding   => "utf8",
-        :reconnect  => true
+        :reconnect  => true,
+        :connect_timeout => 365*24*60*60
       }
 
     end # conn

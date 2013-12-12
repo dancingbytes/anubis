@@ -4,14 +4,14 @@ module Anubis
   class Searchd
 
     def initialize
-      
+
       @params = {}
 
       # default params
-      log         ::File.join(::Rails.root, "log", "sphinx.log")
-      query_log   ::File.join(::Rails.root, "log", "sphinx.query.log")
-      pid_file    ::File.join(::Rails.root, "tmp", "pids", "sphinx.pid")
-      binlog_path ::File.join(::Rails.root, "db",  "anubis")
+      log         ::File.join(::Anubis.root, "log", "sphinx.log")
+      query_log   ::File.join(::Anubis.root, "log", "sphinx.query.log")
+      pid_file    ::File.join(::Anubis.root, "tmp", "pids", "sphinx.pid")
+      binlog_path ::File.join(::Anubis.root, "db",  "anubis")
 
       compat_sphinxql_magics
       query_log_format
@@ -26,7 +26,7 @@ module Anubis
     def host
       @host || "127.0.0.1"
     end # host
-    
+
     def port
       (@port || 9306).to_i
     end # port
@@ -37,7 +37,7 @@ module Anubis
     private
 
     def listen(val)
-      
+
       #
       # localhost
       # 192.168.0.1
@@ -48,7 +48,7 @@ module Anubis
       # 192.168.0.1:5000:mysql41
       #
       re = /\A(?<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|localhost)(:(?<port>(\d+))){0,1}(:mysql41){0,1}\Z|\A(?<port2>\d+)\Z/
-      
+
       if r = (@params["listen"] = val || "").match(re)
         @host = r["ip"]
         @port = r["port"] || r["port2"]
@@ -62,7 +62,7 @@ module Anubis
       ::Anubis.mkdir(::File.dirname(val))
       @params["log"] = val
 
-    end # log  
+    end # log
 
     def query_log(val = nil)
 
@@ -71,26 +71,26 @@ module Anubis
       @params["query_log"] = val
 
     end # query_log
-    
+
     def query_log_format(val = "sphinxql")
 
       if ["plain", "sphinxql"].include?(val)
         @params["query_log_format"] = val
       end
 
-    end # query_log_format 
+    end # query_log_format
 
     def read_timeout(val = 5)
       @params["read_timeout"] = val
-    end # read_timeout  
+    end # read_timeout
 
     def client_timeout(val = 300)
       @params["client_timeout"] = val
-    end # client_timeout  
+    end # client_timeout
 
     def max_children(val = 0)
       @params["max_children"] = val
-    end # max_children  
+    end # max_children
 
     def pid_file(val)
 
@@ -102,15 +102,15 @@ module Anubis
 
     def max_matches(val = 1000)
       @params["max_matches"] = val
-    end # max_matches 
+    end # max_matches
 
     def seamless_rotate(val = 1)
       @params["seamless_rotate"] = val
-    end # seamless_rotate  
+    end # seamless_rotate
 
     def preopen_indexes(val = 1)
       @params["preopen_indexes"] = val
-    end # preopen_indexes  
+    end # preopen_indexes
 
     def unlink_old(val = 1)
       @params["unlink_old"] = val
@@ -122,7 +122,7 @@ module Anubis
 
     def ondisk_dict_default(val = 0)
       @params["ondisk_dict_default"] = val
-    end # ondisk_dict_default  
+    end # ondisk_dict_default
 
     def max_packet_size(val = "8M")
       @params["max_packet_size"] = val
@@ -170,10 +170,10 @@ module Anubis
 
     def dist_threads(val = nil)
       @params["dist_threads"] = val unless val
-    end # dist_threads  
+    end # dist_threads
 
     def binlog_path(val)
-      
+
       ::Anubis.mkdir(val) if val
       @params["binlog_path"] = val || ""
 
@@ -185,7 +185,7 @@ module Anubis
         @params["binlog_flush"] = val
       end
 
-    end # binlog_flush  
+    end # binlog_flush
 
     def binlog_max_log_size(val = "16M") # 0
       @params["binlog_max_log_size"] = val
@@ -193,11 +193,11 @@ module Anubis
 
     def collation_server(val = "libc_ci")
       @params["collation_server"] = val # utf8_ci
-    end # collation_server  
+    end # collation_server
 
     def collation_libc_locale(val = "C")
       @params["collation_libc_locale"] = val # ru_RU
-    end # collation_libc_locale  
+    end # collation_libc_locale
 
     def plugin_dir(val = nil)
       @params["plugin_dir"] = (val && ::FileTest.directory?(val) ? val : "")
@@ -205,31 +205,39 @@ module Anubis
 
     def mysql_version_string(val = nil)
       @params["mysql_version_string"] = val || ""
-    end # mysql_version_string  
+    end # mysql_version_string
 
     def rt_flush_period(val = 0)
       @params["rt_flush_period"] = val
-    end # rt_flush_period  
+    end # rt_flush_period
 
     def thread_stack(val = "64K")
       @params["thread_stack"] = val
-    end # thread_stack  
+    end # thread_stack
 
     def expansion_limit(val = 0)
       @params["expansion_limit"] = val
-    end # expansion_limit  
+    end # expansion_limit
 
     def compat_sphinxql_magics(val = 0)
-      @params["compat_sphinxql_magics"] = val
-    end # compat_sphinxql_magics  
+
+      if ::Anubis::sphinx_version.major == 1 ||
+         (::Anubis::sphinx_version.major == 2 &&
+          ::Anubis::sphinx_version.minor < 2)
+
+        @params["compat_sphinxql_magics"] = val
+
+      end
+
+    end # compat_sphinxql_magics
 
     def watchdog(val = 1)
       @params["watchdog"] = val ? 1 : 0
-    end # watchdog  
+    end # watchdog
 
     def prefork_rotation_throttle(val = 0)
       @params["prefork_rotation_throttle"] = val
-    end # prefork_rotation_throttle  
+    end # prefork_rotation_throttle
 
   end # Searchd
 

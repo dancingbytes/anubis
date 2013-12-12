@@ -1,4 +1,7 @@
 # encoding: utf-8
+require  'anubis/sphinx/core'
+require  'anubis/sphinx/version'
+
 require  'anubis/protocol'
 require  'anubis/version'
 
@@ -141,21 +144,21 @@ module Anubis
   def start
 
     return unless config_exists?
-    msg `searchd -c #{sphinx_conf}`, $?, "Ok"
+    msg `#{::Anubis::SphinxCore.searchd} -c #{sphinx_conf}`, $?, "Ok"
 
   end # start
 
   def stop
 
     return unless config_exists?
-    msg `searchd -c #{sphinx_conf} --stop`, $?, "Ok"
+    msg `#{::Anubis::SphinxCore.searchd} -c #{sphinx_conf} --stop`, $?, "Ok"
 
   end # stop
 
   def stopwait
 
     return unless config_exists?
-    msg `searchd -c #{sphinx_conf} --stopwait`, $?, "Ok"
+    msg `#{::Anubis::SphinxCore.searchd} -c #{sphinx_conf} --stopwait`, $?, "Ok"
 
   end # stopwait
 
@@ -210,6 +213,10 @@ module Anubis
 
   end # drop_all
 
+  def sphinx_version
+    @sphinx_version ||= ::Anubis::SphinxVersion.new
+  end # sphinx_version
+
   private
 
   def manage_index(name)
@@ -223,7 +230,16 @@ module Anubis
   end # manage_index
 
   def msg(result, answer, message = nil)
-    puts (answer.exitstatus == 0 ? (message || result) : ::Rails.logger.error(result))
+
+    if answer.exitstatus == 0
+      puts (message || result)
+    else
+
+      ::Rails.logger.error(result) if defined?(::Rails)
+      puts result
+
+    end
+
   end # msg
 
   def config_exists?
@@ -239,8 +255,8 @@ module Anubis
 
   def conn
 
-    sphinx_connect if (::Thread.current[:conn].nil? || !::Thread.current[:conn].ping)
-    ::Thread.current[:conn]
+    sphinx_connect if (::Thread.current[:anubis].nil? || !::Thread.current[:anubis].ping)
+    ::Thread.current[:anubis]
 
   end # conn
 
@@ -249,19 +265,18 @@ module Anubis
     retry_stop = false
 
     begin
-      ::Thread.current[:conn] = ::Anubis::Protocol.connection(::Anubis::Builder.conn)
+      ::Thread.current[:anubis] = ::Anubis::Protocol.connection(::Anubis::Builder.conn)
     rescue => e
 
       e = ::Anubis::SphinxError.new(e)
-      if !retry_stop &&
-        (
-          !(e.error =~ ::Regexp.new("Can't connect to Sphinx server on")).nil? ||
+      if  !retry_stop &&
           !(e.error =~ ::Regexp.new("Lost connection to MySQL server during query")).nil?
-        )
+
         retry_stop = true
         start
         sleep 3
         retry
+
       end
 
       raise e

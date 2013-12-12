@@ -1,77 +1,54 @@
 # encoding: utf-8
+require ::File.expand_path('../../anubis/commands_tasks', __FILE__)
+
 namespace :anubis do
 
   desc 'Generate Sphinx config'
   task :config => :environment do
 
-    puts
-    puts "Generating sphinx config #{Anubis.sphinx_conf}... "
-    raise ::Anubis::SphinxError.new("Error generate sphinx config") unless Anubis.configure
-    puts "Ok"
+    ::Anubis::CommandsTasks.config
 
   end # :config
 
   desc 'Starting Sphinx'
   task :start => :environment do
 
-    puts
-    puts "Starting sphinx..."
-    Anubis.start
+    ::Anubis::CommandsTasks.start
 
   end # :start
 
   desc 'Stopping Sphinx'
   task :stop => :environment do
 
-    puts
-    puts "Stopping sphinx..."
-    Anubis.stop
+    ::Anubis::CommandsTasks.stop
 
   end # :stop
 
   desc 'Restaring Sphinx'
   task :restart => :environment do
 
-    Rake::Task["anubis:stop"].invoke
-    sleep 2
-    Rake::Task["anubis:start"].invoke
+    ::Anubis::CommandsTasks.restart
 
   end # :restart
 
   desc 'Drop all Sphinx indexes'
   task :drop => :environment do
 
-    Rake::Task["anubis:stop"].invoke
-
-    sleep 2
-
-    puts "Droping all Sphinx indexes..."
-    Anubis.drop_all
+    ::Anubis::CommandsTasks.drop
 
   end # :restart
 
   desc 'Create all Sphinx indexes'
   task :create => :environment do
 
-    Rake::Task["anubis:stop"].invoke
-
-    sleep 2
-
-    puts "Creating all Sphinx indexes..."
-    Anubis.create_all
+    ::Anubis::CommandsTasks.create
 
   end # :restart
 
   desc 'Rebuild all Sphinx indexes'
   task :rebuild => :environment do
 
-    Rake::Task["anubis:drop"].invoke
-    Rake::Task["anubis:config"].invoke
-
-    puts "Creating all Sphinx indexes..."
-    Anubis.create_all
-
-    Rake::Task["anubis:start"].invoke
+    ::Anubis::CommandsTasks.rebuild
 
   end # :restart
 

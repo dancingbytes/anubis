@@ -8,7 +8,7 @@ module Anubis
       @params = { "type" => "rt" }
 
       # default params
-      path  ::File.join(::Rails.root, "db", "anubis", "data", name)
+      path  ::File.join(::Anubis.root, "db", "anubis", "data", name)
       dict
       charset_type
       morphology
@@ -19,7 +19,7 @@ module Anubis
     end # new
 
     def compile
-      
+
       @params["rt_field"].uniq!           if @params["rt_field"]
       @params["rt_attr_uint"].uniq!       if @params["rt_attr_uint"]
       @params["rt_attr_bigint"].uniq!     if @params["rt_attr_bigint"]
@@ -40,21 +40,21 @@ module Anubis
     def path(val)
 
       return unless val
-        
+
       arr = ::File.split(val)
       arr.pop
       if (path = ::File.join(arr))
         ::Anubis.mkdir(path)
         @params["path"] = val
       end
-      
+
     end # path
-    
+
     def docinfo(val = "extern")
 
       if ["extern", "none", "extern", "inline"].include?(val)
         @params["docinfo"] = val
-      end  
+      end
 
     end # docinfo
 
@@ -64,13 +64,13 @@ module Anubis
 
     def morphology(val = "stem_en, stem_ru")
       @params["morphology"] = val
-    end # morphology  
+    end # morphology
 
     def dict(val = "keywords")
 
       if ["crc", "keywords"].include?(val)
         @params["dict"] = val
-      end  
+      end
 
     end # dict
 
@@ -84,7 +84,7 @@ module Anubis
 
     def min_stemming_len(val = 1)
       @params["min_stemming_len"] = val
-    end # min_stemming_len  
+    end # min_stemming_len
 
     def stopwords(val = nil)
       @params["stopwords"] = val || ""
@@ -92,22 +92,22 @@ module Anubis
 
     def wordforms(val = nil)
       @params["wordforms"] = val || ""
-    end # wordforms  
+    end # wordforms
 
     def exceptions(val = nil)
       @params["exceptions"] = val || ""
-    end # exceptions  
+    end # exceptions
 
     def min_word_len(val = 1)
       @params["min_word_len"] = val
-    end # min_word_len  
+    end # min_word_len
 
     def charset_type(val = "utf-8") # sbcs
 
       if ["sbcs", "utf-8"].include?(val)
         @params["charset_type"] = val
       end
-        
+
     end # charset_type
 
     def charset_table(table = nil)
@@ -152,7 +152,7 @@ module Anubis
 
     def min_prefix_len(val = 0)
       @params["min_prefix_len"] = val
-    end # min_prefix_len  
+    end # min_prefix_len
 
     def min_infix_len(val = 0)
       @params["min_infix_len"] = val
@@ -160,15 +160,15 @@ module Anubis
 
     def prefix_fields(val = nil)
       @params["prefix_fields"] = val || ""
-    end # prefix_fields  
+    end # prefix_fields
 
     def infix_fields(val = nil)
       @params["infix_fields"] = val || ""
-    end # infix_fields  
+    end # infix_fields
 
     def enable_star(val = 0)
       @params["enable_star"] = val ? 1 : 0
-    end # enable_star  
+    end # enable_star
 
     def ngram_len(val = 0)
       @params["ngram_len"] = val
@@ -176,15 +176,15 @@ module Anubis
 
     def ngram_chars(table = nil)
       @params["ngram_chars"] = table || ""
-    end # ngram_chars  
+    end # ngram_chars
 
     def phrase_boundary(val = nil)
       @params["phrase_boundary"] = val || ""
-    end # phrase_boundary  
+    end # phrase_boundary
 
     def phrase_boundary_step(val = 0)
       @params["phrase_boundary_step"] = val
-    end # phrase_boundary_step  
+    end # phrase_boundary_step
 
     def html_strip(val = 1)
       @params["html_strip"] = val ? 1 : 0
@@ -204,7 +204,7 @@ module Anubis
 
     def agent(val = nil)
       @params["agent"] = val || ""
-    end # agent  
+    end # agent
 
     def agent_blackhole(val = nil)
       @params["agent_blackhole"] = val || ""
@@ -212,23 +212,31 @@ module Anubis
 
     def agent_connect_timeout(val = 1000)
       @params["agent_connect_timeout"] = val
-    end # agent_connect_timeout  
+    end # agent_connect_timeout
 
     def agent_query_timeout(val = 3000)
       @params["agent_query_timeout"] = val
-    end # agent_query_timeout  
+    end # agent_query_timeout
 
     def preopen(val = 1) # 0
       @params["preopen"] = val ? 1 : 0
-    end # preopen  
+    end # preopen
 
     def ondisk_dict(val = 0)
-      @params["ondisk_dict"] = val ? 1 : 0
+
+      if ::Anubis::sphinx_version.major == 1 ||
+         (::Anubis::sphinx_version.major == 2 &&
+          ::Anubis::sphinx_version.minor < 2)
+
+        @params["ondisk_dict"] = val ? 1 : 0
+
+      end
+
     end # ondisk_dict
 
     def inplace_enable(val = 0)
       @params["inplace_enable"] = val ? 1 : 0
-    end # inplace_enable  
+    end # inplace_enable
 
     def inplace_hit_gap(val = 0)
       @params["inplace_hit_gap"] = val
@@ -240,11 +248,11 @@ module Anubis
 
     def inplace_reloc_factor(val = 0.1)
       @params["inplace_reloc_factor"] = val
-    end # inplace_reloc_factor  
+    end # inplace_reloc_factor
 
     def inplace_write_factor(val = 0.1)
       @params["inplace_write_factor"] = val
-    end # inplace_write_factor  
+    end # inplace_write_factor
 
     def index_exact_words(val = 0)
       @params["index_exact_words"] = val ? 1 : 0
@@ -260,11 +268,11 @@ module Anubis
 
     def hitless_words(val = "all")
       @params["hitless_words"] = val
-    end # hitless_words  
+    end # hitless_words
 
     def expand_keywords(val = 0)
       @params["expand_keywords"] = val ? 1 : 0
-    end # expand_keywords  
+    end # expand_keywords
 
     def blend_chars(val = nil)
       @params["blend_chars"] = val || ""
@@ -276,7 +284,7 @@ module Anubis
 
     def rt_mem_limit(val = "128M")
       @params["rt_mem_limit"] = val || ""
-    end # rt_mem_limit  
+    end # rt_mem_limit
 
     def rt_field(val)
       (@params["rt_field"] ||= []) << val if val
@@ -296,11 +304,11 @@ module Anubis
 
     def rt_attr_multi(val)
       (@params["rt_attr_multi"] ||= []) << val if val
-    end # rt_attr_multi  
+    end # rt_attr_multi
 
     def rt_attr_multi_64(val)
       (@params["rt_attr_multi_64"] ||= []) << val if val
-    end # rt_attr_multi_64  
+    end # rt_attr_multi_64
 
     def rt_attr_timestamp(val)
       (@params["rt_attr_timestamp"] ||= []) << val if val
@@ -308,7 +316,7 @@ module Anubis
 
     def rt_attr_string(val)
       (@params["rt_attr_string"] ||= []) << val if val
-    end # rt_attr_string  
+    end # rt_attr_string
 
   end # Index
 

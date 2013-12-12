@@ -13,10 +13,15 @@ Gem::Specification.new do |s|
   s.summary     = 'Simple search on Sphinx for ruby/rails'
   s.description = 'Sphinx (only SphinxQL support) wrapper for Ruby/Rails'
 
+  s.required_ruby_version = '>= 1.9.3'
+
   s.files       = `git ls-files`.split("\n")
   s.test_files  = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.extra_rdoc_files = ['README.md']
   s.require_paths = ['lib']
+
+  s.bindir      = 'bin'
+  s.executables = ['anubis']
 
   s.licenses    = ['BSD']
 

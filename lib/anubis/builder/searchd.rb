@@ -121,7 +121,15 @@ module Anubis
     end # attr_flush_period
 
     def ondisk_dict_default(val = 0)
-      @params["ondisk_dict_default"] = val
+
+      if ::Anubis::sphinx_version.major == 1 ||
+         (::Anubis::sphinx_version.major == 2 &&
+          ::Anubis::sphinx_version.minor < 2)
+
+        @params["ondisk_dict_default"] = val
+
+      end
+
     end # ondisk_dict_default
 
     def max_packet_size(val = "8M")

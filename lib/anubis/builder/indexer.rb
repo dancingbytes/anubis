@@ -4,7 +4,7 @@ module Anubis
   class Indexer
 
     def initialize
-      
+
       @params = {}
 
       # defult params
@@ -37,7 +37,7 @@ module Anubis
 
     def write_buffer(val = "1M")
       @params["write_buffer"] = val
-    end # write_buffer  
+    end # write_buffer
 
     def max_file_field_buffer(val = "128M")
       @params["max_file_field_buffer"] = val
@@ -48,9 +48,21 @@ module Anubis
       if ["ignore_field", "skip_document", "fail_index"].include?(val)
         @params["on_file_field_error"] = val
       end
-      
-    end # on_file_field_error  
 
-  end # Indexer 
+    end # on_file_field_error
+
+    def lemmatizer_cache(val = "32M")
+
+      if ::Anubis::sphinx_version.major >= 2 &&
+         ::Anubis::sphinx_version.minor >= 1 &&
+         ::Anubis::sphinx_version.patch >= 1
+
+        @params["lemmatizer_cache"] = val
+
+      end
+
+    end # lemmatizer_cache
+
+  end # Indexer
 
 end # Anubis

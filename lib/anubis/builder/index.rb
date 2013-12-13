@@ -167,7 +167,15 @@ module Anubis
     end # infix_fields
 
     def enable_star(val = 0)
-      @params["enable_star"] = val ? 1 : 0
+
+      if ::Anubis::sphinx_version.major == 1 ||
+         (::Anubis::sphinx_version.major == 2 &&
+          ::Anubis::sphinx_version.minor < 2)
+
+        @params["enable_star"] = val ? 1 : 0
+
+      end
+
     end # enable_star
 
     def ngram_len(val = 0)

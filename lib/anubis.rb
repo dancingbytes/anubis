@@ -19,19 +19,19 @@ module Anubis
 
   def root
 
-    unless @root
-      @root = ::Rails.root if defined?(::Rails)
-    end
-    @root
+    @root ||= ::Rails.root if defined?(::Rails)
+    @root ||= ::Dir.pwd
 
   end # root
 
   def logger(msg)
 
-    unless @logger
-      @logger = ::Rails.logger if defined?(::Rails)
+    if defined?(::Rails)
+      @logger ||= ::Rails.logger if defined?(::Rails)
+      @logger.error(msg)
+    else
+      puts msg
     end
-    @logger.error(msg)
 
   end # logger
 
@@ -53,16 +53,18 @@ module Anubis
     ::Anubis::Snippets.new(self, data, index, query)
   end # snippets
 
-  def escape(str, escape_fields = true)
+  def escape(s, escape_fields = true)
 
-    str = (str || "")
-      .gsub(/[\n\r]/, " ")
-      .gsub('/', '\/')
-      .gsub('-', '\\-')
-      .gsub('(', '\\(')
-      .gsub(')', '\\)')
+    return s unless s.is_a?(String)
 
-    str = str.gsub('@', '\\@') if escape_fields
+    str = s.gsub(/[\n\r]/, " ")
+
+    str.gsub!('/', '\/')
+    str.gsub!('-', '\\-')
+    str.gsub!('(', '\\(')
+    str.gsub!(')', '\\)')
+
+    str.gsub!('@', '\\@') if escape_fields
 
     conn.escape(str)
 
@@ -144,21 +146,21 @@ module Anubis
   def start
 
     return unless config_exists?
-    msg `#{::Anubis::SphinxCore.searchd} -c #{sphinx_conf}`, $?, "Ok"
+    system_call `#{::Anubis::SphinxCore.searchd} -c #{sphinx_conf}`, "Ok"
 
   end # start
 
   def stop
 
     return unless config_exists?
-    msg `#{::Anubis::SphinxCore.searchd} -c #{sphinx_conf} --stop`, $?, "Ok"
+    system_call `#{::Anubis::SphinxCore.searchd} -c #{sphinx_conf} --stop`, "Ok"
 
   end # stop
 
   def stopwait
 
     return unless config_exists?
-    msg `#{::Anubis::SphinxCore.searchd} -c #{sphinx_conf} --stopwait`, $?, "Ok"
+    system_call `#{::Anubis::SphinxCore.searchd} -c #{sphinx_conf} --stopwait`, "Ok"
 
   end # stopwait
 
@@ -173,6 +175,7 @@ module Anubis
 
       arr = ::File.split(path)
       arr.pop
+
       if (path = ::File.join(arr))
         ::Anubis.mkdir(path)
         puts "Ok"
@@ -198,7 +201,7 @@ module Anubis
 
     puts "Remove directory for Sphinx index `#{name}`..."
     manage_index(name) do |path|
-      msg `rm -rf #{path}.*`, $?, "Ok"
+      system_call `rm -rf #{path}.*`, "Ok"
     end
     self
 
@@ -221,34 +224,25 @@ module Anubis
 
   def manage_index(name)
 
-    unless (path = ::Anubis::Builder.db_paths[name])
-      puts ::Anubis.logger("ANUBIS [ERROR] Sphinx index `#{name}` is not found.")
-    else
+    if (path = ::Anubis::Builder.db_paths[name])
       yield(path)
+    else
+      puts ::Anubis.logger("ANUBIS [ERROR] Sphinx index `#{name}` is not found.")
     end # unless
 
   end # manage_index
 
-  def msg(result, answer, message = nil)
-
-    if answer.exitstatus == 0
-      puts (message || result)
-    else
-
-      ::Rails.logger.error(result) if defined?(::Rails)
-      puts result
-
-    end
-
-  end # msg
+  def system_call(result, message = nil)
+    puts ($?.exitstatus == 0 ? (message || result) : ::Anubis.logger(result))
+  end # system_call
 
   def config_exists?
 
-    unless ::File.exist?(sphinx_conf)
-      puts ::Anubis.logger("ANUBIS [ERROR] Configuration file #{sphinx_conf} does not exist. Please, generate it before.")
-      return false
+    if ::File.exist?(sphinx_conf)
+      true
     else
-      return true
+      puts ::Anubis.logger("ANUBIS [ERROR] Configuration file #{sphinx_conf} does not exist. Please, generate it before.")
+      false
     end
 
   end # config_exists?

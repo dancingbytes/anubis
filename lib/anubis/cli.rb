@@ -20,10 +20,7 @@ Usage: anubis COMMAND
 EOT
 
     def initialize(argv)
-
       @argv = argv
-      ::Anubis.instance_variable_set(:@root, ::Dir.pwd)
-
     end # new
 
     def run!

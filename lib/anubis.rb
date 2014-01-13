@@ -94,7 +94,7 @@ module Anubis
 
       end
 
-      puts "[request] #{q}"
+      ::Anubis.logger("[request] #{q}")
       raise ::Anubis::SphinxError.new(e)
 
     end

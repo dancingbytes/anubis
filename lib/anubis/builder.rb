@@ -56,11 +56,13 @@ module Anubis
     def conn
 
       {
-        :host       => @host,
-        :port       => @port,
-        :encoding   => "utf8",
-        :reconnect  => true,
-        :connect_timeout => 365*24*60*60
+        :host             => @host,
+        :port             => @port,
+        :encoding         => "utf8",
+        :reconnect        => true,
+        :read_timeout     => 30,
+        :write_timeout    => 30,
+        :connect_timeout  => 365*24*60*60
       }
 
     end # conn

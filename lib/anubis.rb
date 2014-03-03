@@ -80,7 +80,7 @@ module Anubis
     retry_stop = false
 
     begin
-      conn.query(q, {cast: false, cast_booleans: false, symbolize_keys: false })
+      conn.query(q, { cast: false, cast_booleans: false, symbolize_keys: false })
     rescue => e
 
       e = ::Anubis::SphinxError.new(e)

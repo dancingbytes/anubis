@@ -104,9 +104,15 @@ module Anubis
 
     def charset_type(val = "utf-8") # sbcs
 
-      if ["sbcs", "utf-8"].include?(val)
-        @params["charset_type"] = val
-      end
+      if ::Anubis::sphinx_version.major == 1 ||
+         (::Anubis::sphinx_version.major == 2 &&
+          ::Anubis::sphinx_version.minor < 2)
+
+        if ["sbcs", "utf-8"].include?(val)
+          @params["charset_type"] = val
+        end
+
+      end # if
 
     end # charset_type
 

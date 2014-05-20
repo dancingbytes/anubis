@@ -53,12 +53,8 @@ module Anubis
 
     def lemmatizer_cache(val = "32M")
 
-      if ::Anubis::sphinx_version.major >= 2 &&
-         ::Anubis::sphinx_version.minor >= 1 &&
-         ::Anubis::sphinx_version.patch >= 1
-
+      if ::Anubis::sphinx_version >= "1.1"
         @params["lemmatizer_cache"] = val
-
       end
 
     end # lemmatizer_cache

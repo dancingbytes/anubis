@@ -174,12 +174,8 @@ module Anubis
 
     def enable_star(val = 0)
 
-      if ::Anubis::sphinx_version.major == 1 ||
-         (::Anubis::sphinx_version.major == 2 &&
-          ::Anubis::sphinx_version.minor < 2)
-
+      if ::Anubis::sphinx_version < "2.2"
         @params["enable_star"] = val ? 1 : 0
-
       end
 
     end # enable_star
@@ -238,12 +234,8 @@ module Anubis
 
     def ondisk_dict(val = 0)
 
-      if ::Anubis::sphinx_version.major == 1 ||
-         (::Anubis::sphinx_version.major == 2 &&
-          ::Anubis::sphinx_version.minor < 2)
-
+      if ::Anubis::sphinx_version < "2.2"
         @params["ondisk_dict"] = val ? 1 : 0
-
       end
 
     end # ondisk_dict

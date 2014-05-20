@@ -1,6 +1,6 @@
 # encoding: utf-8
 module Anubis
 
-  VERSION = '0.2.3'
+  VERSION = '0.3.0'
 
 end # Anubis

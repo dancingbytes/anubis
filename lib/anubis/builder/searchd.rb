@@ -101,7 +101,11 @@ module Anubis
     end # pid_file
 
     def max_matches(val = 1000)
-      @params["max_matches"] = val
+
+      if ::Anubis::sphinx_version <= "2.2.2"
+        @params["max_matches"] = val
+      end
+
     end # max_matches
 
     def seamless_rotate(val = 1)
@@ -122,12 +126,8 @@ module Anubis
 
     def ondisk_dict_default(val = 0)
 
-      if ::Anubis::sphinx_version.major == 1 ||
-         (::Anubis::sphinx_version.major == 2 &&
-          ::Anubis::sphinx_version.minor < 2)
-
+      if ::Anubis::sphinx_version < "2.2"
         @params["ondisk_dict_default"] = val
-
       end
 
     end # ondisk_dict_default
@@ -229,12 +229,8 @@ module Anubis
 
     def compat_sphinxql_magics(val = 0)
 
-      if ::Anubis::sphinx_version.major == 1 ||
-         (::Anubis::sphinx_version.major == 2 &&
-          ::Anubis::sphinx_version.minor < 2)
-
+      if ::Anubis::sphinx_version < "2.2"
         @params["compat_sphinxql_magics"] = val
-
       end
 
     end # compat_sphinxql_magics

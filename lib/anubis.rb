@@ -62,7 +62,6 @@ module Anubis
 
     str.gsub!('"', '\"')
     str.gsub!('/', '\/')
-    str.gsub!('-', '\\-')
     str.gsub!('(', '\\(')
     str.gsub!(')', '\\)')
 

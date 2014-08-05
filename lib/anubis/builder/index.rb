@@ -119,7 +119,7 @@ module Anubis
     def charset_table(table = nil)
 
       @params["charset_table"] = table || \
-      "U+FF10..U+FF19->0..9, U+FF21..U+FF3A->a..z, U+FF41..U+FF5A->a..z, 0..9, A..Z->a..z, a..z, \
+      "-, U+FF10..U+FF19->0..9, U+FF21..U+FF3A->a..z, U+FF41..U+FF5A->a..z, 0..9, _, A..Z->a..z, a..z, \
       U+0400->U+0435, U+0401->U+0435, U+0402->U+0452, U+0452, U+0403->U+0433, U+0404->U+0454, \
       U+0454, U+0405->U+0455, U+0455, U+0406->U+0456, U+0407->U+0456, U+0457->U+0456, U+0456, \
       U+0408..U+040B->U+0458..U+045B, U+0458..U+045B, U+040C->U+043A, U+040D->U+0438, U+040E->U+0443, \

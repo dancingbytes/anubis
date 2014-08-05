@@ -60,6 +60,7 @@ module Anubis
 
     str = s.gsub(/[\n\r]/, " ")
 
+    str.gsub!('"', '\"')
     str.gsub!('/', '\/')
     str.gsub!('-', '\\-')
     str.gsub!('(', '\\(')

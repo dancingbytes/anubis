@@ -58,16 +58,11 @@ module Anubis
 
     return s unless s.is_a?(String)
 
-    str = s.gsub(/[\n\r]/, " ")
-
-    str.gsub!('"', '\"')
-    str.gsub!('/', '\/')
-    str.gsub!('(', '\\(')
-    str.gsub!(')', '\\)')
-
-    str.gsub!('@', '\\@') if escape_fields
-
-    conn.escape(str)
+    if escape_fields
+      s.gsub(/[\(\)\|\-!@~\/"\/\^\$\\><&=]/) { |match| "\\\\#{match}" }
+    else
+      s.gsub(/[\(\)\|\-!~\/"\/\^\$\\><&=]/) { |match| "\\\\#{match}" }
+    end
 
   end # escape
 

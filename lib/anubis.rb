@@ -54,6 +54,7 @@ module Anubis
     ::Anubis::Snippets.new(self, data, index, query)
   end # snippets
 
+=begin
   def escape(s, escape_fields = true)
 
     return s unless s.is_a?(String)
@@ -68,6 +69,8 @@ module Anubis
 
   def simple_escape(s)
 
+    return s unless s.is_a?(String)
+
     str = s.gsub(/[\n\r]/, " ")
 
     str.gsub!('"', '\"')
@@ -79,6 +82,40 @@ module Anubis
     conn.escape(str)
 
   end # simple_escape
+=end
+
+  def escape(s, escape_fields = true)
+
+    return s unless s.is_a?(String)
+
+    str = s.gsub(/[\n\r]/, " ")
+
+    str.gsub!('"', '\"')
+    str.gsub!('/', '\/')
+    str.gsub!('(', '\\(')
+    str.gsub!(')', '\\)')
+
+    str.gsub!('@', '\\@') if escape_fields
+
+    conn.escape(str)
+
+  end # escape
+
+  def simple_escape(str)
+    conn.escape(str)
+  end # simple_escape
+
+  def escape2(s, escape_fields = true)
+
+    return s unless s.is_a?(String)
+
+    if escape_fields
+      s.gsub(/[\(\)\|\-!@~\/"\/\^\$\\><&=]/) { |match| "\\\\#{match}" }
+    else
+      s.gsub(/[\(\)\|\-!~\/"\/\^\$\\><&=]/) { |match| "\\\\#{match}" }
+    end
+
+  end # escape
 
   def sql(q)
 

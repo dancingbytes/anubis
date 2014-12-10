@@ -66,8 +66,18 @@ module Anubis
 
   end # escape
 
-  def simple_escape(str)
+  def simple_escape(s)
+
+    str = s.gsub(/[\n\r]/, " ")
+
+    str.gsub!('"', '\"')
+    str.gsub!('/', '\/')
+    str.gsub!('(', '\\(')
+    str.gsub!(')', '\\)')
+    str.gsub!('@', '\\@')
+
     conn.escape(str)
+
   end # simple_escape
 
   def sql(q)

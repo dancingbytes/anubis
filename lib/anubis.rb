@@ -110,9 +110,9 @@ module Anubis
     return s unless s.is_a?(String)
 
     if escape_fields
-      s.gsub(/[\(\)\|\-!@~\/"\/\^\$\\><&=]/) { |match| "\\\\#{match}" }
+      s.gsub(/[\(\)\|\-!@~\/'"\/\^\$\\><&=]/) { |match| "\\\\#{match}" }
     else
-      s.gsub(/[\(\)\|\-!~\/"\/\^\$\\><&=]/) { |match| "\\\\#{match}" }
+      s.gsub(/[\(\)\|\-!~\/'"\/\^\$\\><&=]/) { |match| "\\\\#{match}" }
     end
 
   end # escape

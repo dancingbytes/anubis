@@ -54,36 +54,6 @@ module Anubis
     ::Anubis::Snippets.new(self, data, index, query)
   end # snippets
 
-=begin
-  def escape(s, escape_fields = true)
-
-    return s unless s.is_a?(String)
-
-    if escape_fields
-      s.gsub(/[\(\)\|\-!@~\/"\/\^\$\\><&=]/) { |match| "\\\\#{match}" }
-    else
-      s.gsub(/[\(\)\|\-!~\/"\/\^\$\\><&=]/) { |match| "\\\\#{match}" }
-    end
-
-  end # escape
-
-  def simple_escape(s)
-
-    return s unless s.is_a?(String)
-
-    str = s.gsub(/[\n\r]/, " ")
-
-    str.gsub!('"', '\"')
-    str.gsub!('/', '\/')
-    str.gsub!('(', '\\(')
-    str.gsub!(')', '\\)')
-    str.gsub!('@', '\\@')
-
-    conn.escape(str)
-
-  end # simple_escape
-=end
-
   def escape(s, escape_fields = true)
 
     return s unless s.is_a?(String)
@@ -109,11 +79,10 @@ module Anubis
 
     return s unless s.is_a?(String)
 
-    if escape_fields
-      s.gsub(/[\(\)\|\-!@~\/'"\/\^\$\\><&=]/) { |match| "\\\\#{match}" }
-    else
-      s.gsub(/[\(\)\|\-!~\/'"\/\^\$\\><&=]/) { |match| "\\\\#{match}" }
-    end
+    str = s.gsub(/[\(\)\|\-!~\/"\/\^\$\\><&=]/) { |match| "\\\\#{match}" }
+    str.gsub!(/'/) { |match| "\\#{match}" }
+    str.gsub!(/@/) { |match| "\\\\#{match}" } if escape_fields
+    str
 
   end # escape
 

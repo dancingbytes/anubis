@@ -79,7 +79,8 @@ module Anubis
 
     return s unless s.is_a?(String)
 
-    str = s.gsub(/[\(\)\|\-!~\/"\/\^\$\\><&=]/) { |match| "\\\\#{match}" }
+    str = ::Regexp.escape(s)
+    str.gsub!(/[\(\)!~"\/]/) { |match| "\\\\#{match}" }
     str.gsub!(/'/) { |match| "\\#{match}" }
     str.gsub!(/@/) { |match| "\\\\#{match}" } if escape_fields
     str

@@ -81,6 +81,11 @@ module Anubis
 
     str = ::Regexp.escape(s)
     str.gsub!(/[\(\)!~"\/]/) { |match| "\\\\#{match}" }
+    str.gsub!('\r', '')
+    str.gsub!('\n', '')
+    str.gsub!('\t', '')
+    str.gsub!('|', '\|')
+
     str.gsub!(/-/) { |match| "\\#{match}" }
     str.gsub!(/'/) { |match| "\\#{match}" }
     str.gsub!(/@/) { |match| "\\\\#{match}" } if escape_fields

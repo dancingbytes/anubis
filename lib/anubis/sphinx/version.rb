@@ -3,7 +3,7 @@ module Anubis
 
   class SphinxVersion
 
-    REG_SPHINX = /^Sphinx (\d+)\.(\d+)(?:\.(\d+)(\S+))\s\(r(\d+)\)/.freeze
+    REG_SPHINX = /^Sphinx (\d+)\.(\d+)(?:\.(\d+)(\S+))\s\(.*r(\d+)\)/.freeze
     REG_STRING = /\A(\d+)(?:\.(\d+)(?:\.(\d+)(?:(\S+))?(?:\s\(r(\d+)\))?)?)?\Z/.freeze
 
     def self.cache_versions

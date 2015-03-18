@@ -240,7 +240,11 @@ module Anubis
     end # watchdog
 
     def prefork_rotation_throttle(val = 0)
-      @params["prefork_rotation_throttle"] = val
+
+      if ::Anubis::sphinx_version < "2.3.1"
+        @params["prefork_rotation_throttle"] = val
+      end
+
     end # prefork_rotation_throttle
 
   end # Searchd

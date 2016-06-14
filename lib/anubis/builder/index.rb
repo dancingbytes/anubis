@@ -8,7 +8,7 @@ module Anubis
       @params = { "type" => "rt" }
 
       # default params
-      path  ::File.join(::Anubis.root, "db", "anubis", "data", name)
+      path      ::File.join(::Anubis.root, "datas", name)
       dict
       charset_type
       morphology

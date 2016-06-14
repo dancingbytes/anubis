@@ -8,10 +8,10 @@ module Anubis
       @params = {}
 
       # default params
-      log         ::File.join(::Anubis.root, "log", "sphinx.log")
-      query_log   ::File.join(::Anubis.root, "log", "sphinx.query.log")
-      pid_file    ::File.join(::Anubis.root, "tmp", "pids", "sphinx.pid")
-      binlog_path ::File.join(::Anubis.root, "db",  "anubis")
+      log         ::File.join(::Anubis.root, "log",   "sphinx.log")
+      query_log   ::File.join(::Anubis.root, "log",   "sphinx.query.log")
+      pid_file    ::File.join(::Anubis.root, "pids",  "sphinx.pid")
+      binlog_path ::File.join(::Anubis.root, "binlog")
 
       compat_sphinxql_magics
       query_log_format

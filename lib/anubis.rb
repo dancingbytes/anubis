@@ -18,10 +18,12 @@ module Anubis
 
   extend self
 
-  def root
+  def root(val = nil)
 
-    @root ||= ::Rails.root if defined?(::Rails)
-    @root ||= ::Dir.pwd
+    @root   = val unless val.nil?
+    @root ||= File.join(::Rails.root, 'anubis')  if defined?(::Rails)
+    @root ||= File.join(::Dir.pwd,    'anubis')
+    mkdir(@root)
 
   end # root
 
@@ -37,7 +39,10 @@ module Anubis
   end # logger
 
   def mkdir(val)
-    ::FileUtils.mkdir_p(val, :mode => 0755) unless ::FileTest.directory?(val)
+
+    ::FileUtils.mkdir_p(val, mode: 0755) unless ::FileTest.directory?(val)
+    val
+
   end # mkdir
 
   def meta
@@ -184,8 +189,12 @@ module Anubis
 
   end # stopwait
 
-  def sphinx_conf
+  def sphinx_conf(val = nil)
+
+    @sphinx_conf = mkdir(val) unless val.nil?
     @sphinx_conf ||= ::File.join(::Anubis.root, "config", "sphinx.conf")
+    @sphinx_conf
+
   end # sphinx_conf
 
   def create(name)

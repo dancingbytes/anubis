@@ -189,11 +189,10 @@ module Anubis
 
   end # stopwait
 
-  def sphinx_conf(val = nil)
+  def sphinx_conf
 
-    @sphinx_conf = mkdir(val) unless val.nil?
     @sphinx_conf ||= ::File.join(::Anubis.root, "config", "sphinx.conf")
-    @sphinx_conf
+    mkdir(@sphinx_conf)
 
   end # sphinx_conf
 

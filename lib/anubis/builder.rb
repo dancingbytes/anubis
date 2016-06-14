@@ -36,8 +36,15 @@ module Anubis
       @index    = {}
       @db_paths = {}
 
-      config_file = ::File.join(::Anubis.root, "config", "anubis.rb")
-      raise ::LoadError, "Config file not found at `#{config_file}`" unless ::File.exists?(config_file)
+      config_file = ::File.join(::Rails.root, "config", "anubis.rb")
+
+      unless ::File.exists?(config_file)
+        config_file = ::File.join(::Dir.pwd, "config", "anubis.rb")
+      end
+
+      unless ::File.exists?(config_file)
+        raise ::LoadError, "Config file doesn`t found"
+      end
 
       instance_eval(::File.read(config_file), config_file)
 

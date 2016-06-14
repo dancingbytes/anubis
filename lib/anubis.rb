@@ -192,7 +192,7 @@ module Anubis
   def sphinx_conf
 
     @sphinx_conf ||= ::File.join(::Anubis.root, "config", "sphinx.conf")
-    mkdir(@sphinx_conf)
+    mkdir(::File.dirname(@sphinx_conf))
 
   end # sphinx_conf
 

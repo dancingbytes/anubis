@@ -26,7 +26,7 @@ module Anubis
 
       puts
       puts "Stopping sphinx..."
-      ::Anubis.stop
+      ::Anubis.stopwait
 
     end # stop
 

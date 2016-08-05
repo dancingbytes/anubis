@@ -21,8 +21,9 @@ module Anubis
   def root(val = nil)
 
     @root   = val unless val.nil?
-    @root ||= File.join(::Rails.root, 'anubis')
+    @root ||= File.join(::Rails.root, 'anubis') if defined?(::Rails)
     @root ||= File.join(::Dir.pwd,    'anubis')
+
     mkdir(@root)
 
   end # root

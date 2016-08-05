@@ -3,7 +3,7 @@ module Anubis
 
   class SphinxVersion
 
-    REG_SPHINX = /^Sphinx (\d+)\.(\d+)(?:\.(\d+)(\S+))\s\(.*r(\d+)\)/.freeze
+    REG_SPHINX = /^Sphinx (\d+)\.(\d+)(?:\.(\d+)(\S+))\s\((.*r{0,1}\w+|\w+)\)/.freeze
     REG_STRING = /\A(\d+)(?:\.(\d+)(?:\.(\d+)(?:(\S+))?(?:\s\(r(\d+)\))?)?)?\Z/.freeze
 
     def self.cache_versions
@@ -164,7 +164,7 @@ module Anubis
       @major    = resource[1].to_i rescue nil
       @minor    = resource[2].to_i rescue nil
       @patch    = resource[3].to_i rescue nil
-      @rev      = resource[5].to_i rescue nil
+      @rev      = resource[5]
       @version  = [@major, @minor, @patch].join(".")
 
       mt        = resource[4] || ""

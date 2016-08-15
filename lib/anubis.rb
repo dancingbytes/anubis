@@ -70,6 +70,7 @@ module Anubis
     str.gsub!('/', '\/')
     str.gsub!('(', '\\(')
     str.gsub!(')', '\\)')
+    str.gsub!(/\s{1,}\-/, '\\-')
 
     str.gsub!('@', '\\@') if escape_fields
 
@@ -98,7 +99,7 @@ module Anubis
 
     str
 
-  end # escape
+  end # escape2
 
   def sql(q)
 

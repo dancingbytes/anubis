@@ -53,6 +53,9 @@ module Anubis
       @per_page = v.to_s.to_i(10).abs
     end # limit_value
 
+    def exists?
+      count > 0
+    end # exists?
 
     alias :current_page_count   :count
     alias :total_found          :count

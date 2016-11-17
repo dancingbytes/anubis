@@ -71,6 +71,8 @@ module Anubis
     alias :per_page             :limit_value
     alias :per_page=            :limit_value=
 
+    alias :all                  :itself
+
   end # Criteria
 
 end # Anubis

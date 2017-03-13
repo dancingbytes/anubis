@@ -72,7 +72,10 @@ module Anubis
     str.gsub!(')', '\\)')
     str.gsub!(/\s{1,}\-/, '\\-')
 
-    str.gsub!('@', '\\@') if escape_fields
+    if escape_fields
+      str.gsub!('|', '\\|')
+      str.gsub!('@', '\\@')
+    end
 
     conn.escape(str)
 

@@ -8,7 +8,13 @@ module Anubis
     SEARCHD = 'searchd'.freeze
 
     def searchd
-      @bin ||= which || whereis
+      
+      return @bin if @bin
+
+      @bin = which
+      @bin = whereis if @bin.nil? || @bin.empty?
+      @bin
+
     end # searchd
 
     private

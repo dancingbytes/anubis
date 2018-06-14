@@ -154,7 +154,7 @@ module Anubis
     private
 
     def cmd
-      `#{@bin} --help`.chomp
+      %x{#{@bin} --help}.chomp
     end # cmd
 
     def parse(ver, reg)
